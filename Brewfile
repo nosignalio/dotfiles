@@ -5,6 +5,7 @@
 tap "caskroom/cask"
 tap "caskroom/versions"
 tap "johanhaleby/kubetail"
+tap "homebrew/cask"
 
 # Install apps to default /Applications directory
 cask_args appdir: '/Applications'
@@ -19,8 +20,13 @@ cask "docker"
 cask "dropbox"
 cask "firefox"
 cask "google-chrome"
+cask "intellij-idea-ce"
 cask "iterm2"
 cask "java8"
+cask "java11"
+cask "java"
+cask "karabiner-elements"
+cask "keybase"
 cask "minecraft"
 cask "minikube"
 cask "mysqlworkbench"
