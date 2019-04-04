@@ -7,7 +7,7 @@ To install software and libraries via Brew:
 
 ```
 $ cd /path/to/Brewfile
-brew bundle
+$ brew bundle
 ```
 
 ## Copyright
