@@ -1,8 +1,10 @@
 # Install brew stuff without having to think about it.
 #
-# Paul Stevens <29 March 2019>
+# Paul Stevens <2 April 2019>
 
-tap 'caskroom/cask'
+tap "caskroom/cask"
+tap "caskroom/versions"
+tap "johanhaleby/kubetail"
 
 # Install apps to default /Applications directory
 cask_args appdir: '/Applications'
@@ -18,7 +20,7 @@ cask "dropbox"
 cask "firefox"
 cask "google-chrome"
 cask "iterm2"
-cask "java"
+cask "java8"
 cask "minecraft"
 cask "minikube"
 cask "mysqlworkbench"
@@ -67,5 +69,6 @@ brew "tmux"
 brew "tree"
 brew "watch"
 brew "wget"
+brew "zlib"
 brew "zsh"
 brew "zsh-completions"
