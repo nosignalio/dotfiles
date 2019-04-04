@@ -26,11 +26,10 @@ It's an opinionated build of a MacBook Pro, so it:
 * Installs and configures Oh My ZSH.
 * Taps various kegs, installs casks in `/Applications` and installs brews.
 * Grabs SSH assets from a specific backup directory, copies them to `~/.ssh/` and sets permissions.
-* [TODO] Installs a comfortable version of Python 3 using `pyenv` and the `pyenv-virtualenv` wrapper.
-* [TODO] Configures Go.
-* [TODO] Configures `~/.zshrc`.
-* [TODO] Configures iTerm2 the way I like it (`zsh` + Agnoster + DimmedMonokai).
-* [TODO] Configures VSCode the way I like it (DimmedMonokai + plugins).
+* Installs a comfortable version of Python 3 using `pyenv` and the `pyenv-virtualenv` wrapper.
+* Configures Go.
+* Configures `~/.zshrc`.
+* Configures iTerm2 the way I like it (`zsh` + Agnoster + DimmedMonokai) (meh...kind of does this...)
 
 ## Copyright
 

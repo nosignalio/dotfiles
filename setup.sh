@@ -7,6 +7,50 @@ RED="\033[31m"
 YELLOW="\033[1;33m"
 NC="\033[0m"
 
+##############################################################################
+# Stuff
+##############################################################################
+GODEPS=(
+    github.com/ramya-rao-a/go-outline
+    github.com/acroca/go-symbols
+    github.com/mdempsky/gocode
+    github.com/rogpeppe/godef
+    golang.org/x/tools/cmd/godoc
+    github.com/zmb3/gogetdoc
+    golang.org/x/lint/golint
+    github.com/fatih/gomodifytags
+    golang.org/x/tools/cmd/gorename
+    sourcegraph.com/sqs/goreturns
+    golang.org/x/tools/cmd/goimports
+    github.com/cweill/gotests/...
+    golang.org/x/tools/cmd/guru
+    github.com/josharian/impl
+    github.com/haya14busa/goplay/cmd/goplay
+    github.com/uudashr/gopkgs/cmd/gopkgs
+    github.com/davidrjenni/reftools/cmd/fillstruct
+    github.com/alecthomas/gometalinter
+    github.com/kisielk/errcheck
+    gitlab.com/opennota/check/cmd/aligncheck
+    gitlab.com/opennota/check/cmd/structcheck
+    gitlab.com/opennota/check/cmd/varcheck
+    github.com/gordonklaus/ineffassign
+    github.com/mdempsky/maligned
+    github.com/tsenart/deadcode
+    github.com/spf13/cobra/cobra
+    github.com/spf13/viper
+    github.com/gorilla/mux
+    github.com/gorilla/websocket
+    github.com/gin-gonic/gin
+)
+
+function pause () {
+    read -p "$*"
+}
+
+##############################################################################
+# Functions
+##############################################################################
+
 function preferences () {
     echo -e "${YELLOW}Setting up preferences...${NC}"
     echo
@@ -106,6 +150,7 @@ function sshkeys () {
     echo
     echo -e "${YELLOW}Getting SSH keys and settings permissions...${NC}"
 
+    echo
     echo -n "Creating SSH directory: "
     if [[ -d ~/.ssh ]]; then
         echo -e "${GREEN}[OK]${NC}"
@@ -144,6 +189,175 @@ function sshkeys () {
     fi
 }
 
+function actualdotfiles () {
+    echo
+    echo -e "${YELLOW}Copying in dotfiles...${NC}"
+
+    echo
+    echo -n "Copying dotfiles: "
+    cp ~/Documents/Backups/Dotfiles/zshrc ~/.zshrc > /dev/null 2>&1
+    cp ~/Documents/Backups/Dotfiles/gitconfig ~/.gitconfig > /dev/null 2>&1
+    if [[ $? -eq 0 ]]; then
+        echo -e "${GREEN}[OK]${NC}"
+    else
+        echo -e "${RED}[FAILED]${NC}"
+    fi
+
+    # Well this was a fucking stupid idea...
+    # echo -n "Sourcing .zshrc: "
+    # source ~/.zshrc
+    # if [[ $? -eq 0 ]]; then
+    #     echo -e "${GREEN}[OK]${NC}"
+    # else
+    #     echo -e "${RED}[FAILED]${NC}"
+    # fi
+}
+
+function pythonista () {
+    echo
+    echo -e "${YELLOW}Installing Python and prepping virtualenv...${NC}"
+
+    echo
+    echo -n "Checking CCPFLAGS environment variable: "
+    if [[ -z "${CPPFLAGS}" ]]; then
+        echo -e "${RED}[FAILED]${NC}"
+        echo -n "Creating environment variables: "
+        export LDFLAGS="-L/usr/local/opt/zlib/lib -L/usr/local/opt/sqlite/lib"
+        export CPPFLAGS="-I/usr/local/opt/zlib/include -I/usr/local/opt/sqlite/include"
+        export PKG_CONFIG_PATH="/usr/local/opt/zlib/lib/pkgconfig"
+        export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/usr/local/opt/sqlite/lib/pkgconfig"
+        if [[ -z "${CPPFLAGS}" && -z "${LDFLAGS}" && -z "${PKG_CONFIG_PATH}" ]]; then
+            echo -e "${GREEN}[OK]${NC}"
+        else
+            echo -e "${RED}[FAILED]${NC}"
+        fi
+    else
+        echo -e "${GREEN}[OK]${NC}"
+    fi
+
+    echo -n "Checking installed Python 3: "
+    which python3 > /dev/null 2>&1
+    if [[ $? -eq 0 ]]; then
+        echo -e "${GREEN}[OK]${NC}"
+    else
+        echo -e "${RED}[FAILED]${NC}"
+        echo -n "Installing Python 3: "
+        pyenv install 3.7.3
+        if [[ $? -eq 0 ]]; then
+            echo -e "${GREEN}[OK]${NC}"
+        else
+            echo -e "${RED}[FAILED]${NC}"
+        fi
+    fi
+
+    echo -n "Checking virtualenvs: "
+    pyenv virtualenvs --skip-aliases > /dev/null 2>&1
+    if [[ $? -eq 0 ]]; then
+        echo -e "${GREEN}[OK]${NC}"
+    else
+        echo -e "${RED}[FAILED]${NC}"
+        echo -n "Creating virtualenv: "
+        pyenv virtualenv 3.7.3 py37
+        if [[ $? -eq 0 ]]; then
+            echo -e "${GREEN}[OK]${NC}"
+        else
+            echo -e "${RED}[FAILED]${NC}"
+        fi
+    fi
+}
+
+function goforbroke () {
+    echo
+    echo -e "${YELLOW}Installing Go packages and modules...${NC}"
+
+    echo
+    echo -n "Setting PATH to include GOPATH: "
+    export PATH=$PATH:$(go env GOPATH)/bin
+    if [[ -z "${PATH}" ]]; then
+        echo -e "${RED}[FAILED]${NC}"
+    else
+        echo -e "${GREEN}[OK]${NC}"
+    fi
+
+    echo -n "Setting GOPATH: "
+    export GOPATH=$(go env GOPATH)
+    if [[ -z "${GOPATH}" ]]; then
+        echo -e "${RED}[FAILED]${NC}"
+    else
+        echo -e "${GREEN}[OK]${NC}"
+    fi
+
+    export GOPATH=$PATH:~/go
+    for dep in ${GODEPS[@]}; do
+        echo -n "Installing $dep: "
+        go get -u $dep > /dev/null 2>&1
+        if [[ $? -eq 0 ]]; then
+            echo -e "${GREEN}[OK]${NC}"
+        else
+            echo -e "${RED}[FAILED]${NC}"
+        fi
+    done
+
+    echo -n "Running gometalinter installer: "
+    ~/go/bin/gometalinter --install > /dev/null 2>&1
+    if [[ $? -eq 0 ]]; then
+        echo -e "${GREEN}[OK]${NC}"
+    else
+        echo -e "${RED}[FAILED]${NC}"
+    fi
+}
+
+function iterm2 () {
+    echo
+    echo -e "${YELLOW}Pulling in iTerm2 assets...${NC}"
+
+    echo
+    echo -n "Downloading PowerLine patched font set: "
+    if [[ -d ~/Downloads/fonts ]]; then
+        echo -e "${GREEN}[OK]${NC}"
+    else
+        pushd ~/Downloads > /dev/null 2>&1
+        git clone git@github.com:powerline/fonts.git > /dev/null 2>&1
+        if [[ $? -eq 0 ]]; then
+        echo -e "${GREEN}[OK]${NC}"
+        else
+            echo -e "${RED}[FAILED]${NC}"
+        fi
+    fi
+    popd > /dev/null 2>&1
+
+    echo -n "Installing PowerLine patched font set: "
+    pushd ~/Downloads/fonts > /dev/null 2>&1
+    ./install.sh > /dev/null 2>&1
+    if [[ $? -eq 0 ]]; then
+        echo -e "${GREEN}[OK]${NC}"
+    else
+        echo -e "${RED}[FAILED]${NC}"
+    fi
+    popd > /dev/null 2>&1
+
+    echo -n "Import DimmedMonokai theme from backups: "
+    echo -e "${GREEN}[OK]${NC}"
+
+    echo -n "Set font to 14pt Melso LG L DZ Regular for PowerLine"
+    echo -e "${GREEN}[OK]${NC}"
+
+}
+
+##############################################################################
+# Runtime
+##############################################################################
+
 preferences
 installer
 sshkeys
+actualdotfiles
+pythonista
+goforbroke
+iterm2
+
+##############################################################################
+# The long goodbye
+##############################################################################
+echo
+echo -e "${YELLOW}We're done. Should you add anything else, don't forget to update me. Thanks.${NC}"
