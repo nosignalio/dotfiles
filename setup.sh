@@ -11,6 +11,14 @@ function preferences () {
     echo -e "${YELLOW}Setting up preferences...${NC}"
     echo
 
+    echo -n "Invalidating cached sudo credentials: "
+    sudo -k
+    if [[ $? -eq 0 ]]; then
+        echo -e "${GREEN}[OK]${NC}"
+    else
+        echo -e "${RED}[FAILED]${NC}"
+    fi
+    
     echo -n "Please provide your sudo "
     sudo ls > /dev/null 2>&1        # There's gotta be a better way, right?
 
@@ -45,6 +53,43 @@ function preferences () {
 }
 
 function installer () {
+    echo
+    echo -e "${YELLOW}Homebrew setup...${NC}"
+
+    echo
+    echo -n "Checking Homebrew installation: "
+    which brew > /dev/null 2>&1
+    if [[ $? -eq 0 ]]; then
+        echo -e "${GREEN}[OK]${NC}"
+    else
+        echo -e "${RED}[FAILED]${NC}"
+        echo -n "Installing Homebrew: "
+        /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" > /dev/null 2>&1
+        if [[ $? -eq 0 ]]; then
+            echo -e "${GREEN}[OK]${NC}"
+        else
+            echo -e "${RED}[FAILED]${NC}"
+        fi
+    fi
+
+    echo
+    echo -e "${YELLOW}OhMyZSH setup...${NC}"
+
+    echo
+    echo -n "Checking OhMyZSH installation: "
+    if [[ -d ~/.oh-my-zsh ]]; then
+        echo -e "${GREEN}[OK]${NC}"
+    else
+        echo -e "${RED}[FAILED]${NC}"
+        echo -n "Installing OhMyZSH: "
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" > /dev/null 2>&1
+        if [[ $? -eq 0 ]]; then
+            echo -e "${GREEN}[OK]${NC}"
+        else
+            echo -e "${RED}[FAILED]${NC}"
+        fi
+    fi
+
     echo
     echo -e "${YELLOW}Installing software...${NC}"
     
