@@ -41,6 +41,7 @@ GODEPS=(
     github.com/gorilla/mux
     github.com/gorilla/websocket
     github.com/gin-gonic/gin
+    go.mozilla.org/sops/cmd/sops
 )
 
 DOTFILES=(
