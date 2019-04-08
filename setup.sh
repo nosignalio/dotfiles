@@ -53,6 +53,11 @@ OTHERDOTFILES=(
     ~/Documents/Backups/Dotfiles/personal-gitconfig
 )
 
+AWSDOTFILES=(
+    ~/Documents/Backups/Dotfiles/AWS/config
+    ~/Documents/Backups/Dotfiles/AWS/credentials
+)
+
 ##############################################################################
 # Functions
 ##############################################################################
@@ -200,10 +205,6 @@ function actualdotfiles () {
     echo -e "${YELLOW}Copying in dotfiles...${NC}"
 
     echo
-    echo -n "Copying dotfiles: "
-    cp ~/Documents/Backups/Dotfiles/zshrc ~/.zshrc > /dev/null 2>&1
-    cp ~/Documents/Backups/Dotfiles/gitconfig ~/.gitconfig > /dev/null 2>&1
-    cp ~/Documents/Backups/Dotfiles/personal
     for df in ${DOTFILES[@]}; do
         echo -n "Copying $df: "
         cp $df ~/.$df > /dev/null 2>&1
@@ -218,6 +219,16 @@ function actualdotfiles () {
     for odf in ${OTHERDOTFILES[@]}; do
         echo -n "Copying $odf: "
         cp $odf ~/Code/nosignal-repo/.gitconfig > /dev/null 2>&1
+        if [[ $? -eq 0 ]]; then
+            echo -e "${GREEN}[OK]${NC}"
+        else
+            echo -e "${RED}[FAILED]${NC}"
+        fi
+    done
+
+    for aws in ${AWSDOTFILES[@]}; do
+        echo -n "Copying $aws: "
+        cp $aws ~/.aws/$aws > /dev/null 2>&1
         if [[ $? -eq 0 ]]; then
             echo -e "${GREEN}[OK]${NC}"
         else
