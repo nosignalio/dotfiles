@@ -43,9 +43,14 @@ GODEPS=(
     github.com/gin-gonic/gin
 )
 
-function pause () {
-    read -p "$*"
-}
+DOTFILES=(
+    ~/Documents/Backups/Dotfiles/gitconfig
+    ~/Documents/Backups/Dotfiles/zshrc
+)
+
+OTHERDOTFILES=(
+    ~/Documents/Backups/Dotfiles/personal-gitconfig
+)
 
 ##############################################################################
 # Functions
@@ -197,20 +202,27 @@ function actualdotfiles () {
     echo -n "Copying dotfiles: "
     cp ~/Documents/Backups/Dotfiles/zshrc ~/.zshrc > /dev/null 2>&1
     cp ~/Documents/Backups/Dotfiles/gitconfig ~/.gitconfig > /dev/null 2>&1
-    if [[ $? -eq 0 ]]; then
-        echo -e "${GREEN}[OK]${NC}"
-    else
-        echo -e "${RED}[FAILED]${NC}"
-    fi
-
-    # Well this was a fucking stupid idea...
-    # echo -n "Sourcing .zshrc: "
-    # source ~/.zshrc
-    # if [[ $? -eq 0 ]]; then
-    #     echo -e "${GREEN}[OK]${NC}"
-    # else
-    #     echo -e "${RED}[FAILED]${NC}"
-    # fi
+    cp ~/Documents/Backups/Dotfiles/personal
+    for df in ${DOTFILES[@]}; do
+        echo -n "Copying $df: "
+        cp $df ~/.$df > /dev/null 2>&1
+        if [[ $? -eq 0 ]]; then
+            echo -e "${GREEN}[OK]${NC}"
+        else
+            echo -e "${RED}[FAILED]${NC}"
+        fi
+    done
+    
+    # Yay! Snowflake!
+    for odf in ${OTHERDOTFILES[@]}; do
+        echo -n "Copying $odf: "
+        cp $odf ~/Code/nosignal-repo/.gitconfig > /dev/null 2>&1
+        if [[ $? -eq 0 ]]; then
+            echo -e "${GREEN}[OK]${NC}"
+        else
+            echo -e "${RED}[FAILED]${NC}"
+        fi
+    done
 }
 
 function pythonista () {
