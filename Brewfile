@@ -1,6 +1,6 @@
 # Install brew stuff without having to think about it.
 #
-# Paul Stevens <2 April 2019>
+# Paul Stevens <15 April 2019>
 
 tap "caskroom/cask"
 tap "caskroom/versions"
@@ -71,6 +71,7 @@ brew "rbenv"
 brew "repo"
 brew "scala"
 brew "sqlite"
+brew "stern"
 brew "terraform"
 brew "tmux"
 brew "tree"
