@@ -45,17 +45,17 @@ GODEPS=(
 )
 
 DOTFILES=(
-    ~/Documents/Backups/Dotfiles/gitconfig
-    ~/Documents/Backups/Dotfiles/zshrc
+    $HOME/Documents/Backups/Dotfiles/gitconfig
+    $HOME/Documents/Backups/Dotfiles/zshrc
 )
 
 OTHERDOTFILES=(
-    ~/Documents/Backups/Dotfiles/personal-gitconfig
+    $HOME/Documents/Backups/Dotfiles/personal-gitconfig
 )
 
 AWSDOTFILES=(
-    ~/Documents/Backups/Dotfiles/AWS/config
-    ~/Documents/Backups/Dotfiles/AWS/credentials
+    $HOME/Documents/Backups/Dotfiles/AWS/config
+    $HOME/Documents/Backups/Dotfiles/AWS/credentials
 )
 
 ##############################################################################
