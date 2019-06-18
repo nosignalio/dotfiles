@@ -17,7 +17,7 @@ cask "diffmerge"
 cask "firefox"
 cask "chef/chef/inspec"
 cask "iterm2"
-cask "java8"
+# cask "java8" => Error: Cask 'java8' is unavailable: No Cask with this name exists
 cask "java11"
 cask "java"
 cask "spotify"
