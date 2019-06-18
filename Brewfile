@@ -11,7 +11,6 @@ tap "homebrew/cask"
 cask_args appdir: '/Applications'
 
 # Casks
-cask "1password"
 cask "adobe-acrobat-reader"
 cask "cpuinfo"
 cask "diffmerge"
